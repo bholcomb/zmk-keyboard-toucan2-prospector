@@ -5,7 +5,15 @@
 #include <dt-bindings/zmk/matrix_transform.h>
 #include <physical_layouts.dtsi>
 
+// Host shortcut flavour for the touchpad gestures. Define exactly one.
+// Affects zip_zoom_mapper and swipe_button_mapper.
 //#define TOUCAN_WIN_MODE
+//#define TOUCAN_MAC_MODE
+#define TOUCAN_LINUX_MODE
+
+#if !defined(TOUCAN_WIN_MODE) && !defined(TOUCAN_MAC_MODE) && !defined(TOUCAN_LINUX_MODE)
+#error "Define one of TOUCAN_WIN_MODE, TOUCAN_MAC_MODE or TOUCAN_LINUX_MODE"
+#endif
 
 / {
     chosen {
@@ -87,10 +95,11 @@
             #input-processor-cells = <0>;
             event-code = <INPUT_REL_MISC>;
             sensitivity = <10>;
-#ifdef TOUCAN_WIN_MODE
-            bindings = <&kp LC(MINUS)>, <&kp LC(EQUAL)>;
-#else
+#if defined(TOUCAN_MAC_MODE)
             bindings = <&kp LG(MINUS)>, <&kp LG(EQUAL)>;
+#elif defined(TOUCAN_WIN_MODE) || defined(TOUCAN_LINUX_MODE)
+            // Windows and Linux both zoom with Ctrl
+            bindings = <&kp LC(MINUS)>, <&kp LC(EQUAL)>;
 #endif
             track-remainders;
         };
@@ -106,11 +115,15 @@
         swipe_button_mapper: swipe_button_mapper {
             compatible = "zmk,input-processor-behaviors";
             #input-processor-cells = <0>;
+            //          up               right               down                left
             codes = <INPUT_BTN_NORTH INPUT_BTN_EAST INPUT_BTN_SOUTH INPUT_BTN_WEST>;
-#ifdef TOUCAN_WIN_MODE
+#if defined(TOUCAN_WIN_MODE)
             bindings = <&kp LG(TAB)>, <&kp LG(RIGHT)>, <&kp LG(D)>, <&kp LG(LEFT)>;
-#else
+#elif defined(TOUCAN_MAC_MODE)
             bindings = <&kp LC(LG(UP))>, <&kp LC(LG(RIGHT))>, <&kp LC(LG(DOWN))>, <&kp LC(LG(LEFT))>;
+#elif defined(TOUCAN_LINUX_MODE)
+            // Ctrl+Alt+arrow switches workspaces
+            bindings = <&kp LC(LA(UP))>, <&kp LC(LA(RIGHT))>, <&kp LC(LA(DOWN))>, <&kp LC(LA(LEFT))>;
 #endif
         };
     };
