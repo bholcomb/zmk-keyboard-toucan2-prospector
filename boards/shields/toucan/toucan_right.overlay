@@ -72,6 +72,10 @@
         single-tap;
         press-and-hold;
         //swipes;
+        // This gesture wedged the dongle until CONFIG_INPUT_THREAD_STACK_SIZE was raised
+        // to 2048 there: swipe_button_mapper maps it to &kp LC(LG(...)) chords, and
+        // invoking those is the deepest path on the central's input thread. Left enabled
+        // deliberately so that fix stays under test.
         three-finger-swipe;
         three-finger-swipe-throttle-ms = <1200>;
         switch-xy;
