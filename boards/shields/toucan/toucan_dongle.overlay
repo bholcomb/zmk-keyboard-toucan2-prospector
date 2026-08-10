@@ -1,9 +1,8 @@
-#include "toucan.dtsi"
+#include "toucan-layout.dtsi"
 
 / {
     chosen {
         zmk,kscan = &mock_kscan;
-        zmk,physical-layout = &default_layout;
     };
 
     mock_kscan: mock_kscan_0 {
