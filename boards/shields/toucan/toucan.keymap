@@ -10,6 +10,31 @@
 #define ADJ  3
 
 / {
+    behaviors {
+        hm: home_row_mods {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            tapping-term-ms = <200>;
+            quick-tap-ms = <0>;
+            flavor = "tap-preferred"; 
+            bindings = <&kp>, <&kp>;
+        };
+
+        td_shift_caps: tap_dance_shift_caps {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>; 
+            bindings = <&kp LSHIFT>, <&caps_word>;
+        };
+
+        bs_del: backspace_delete {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp BSPK>, <&kp DEL>;
+            mods = <(MOD_LSFT|MOD_RSFT)>; // Shift + Backspace = Delete
+        };
+    };
+
     conditional_layers {
         compatible = "zmk,conditional-layers";
         tri_layer {
